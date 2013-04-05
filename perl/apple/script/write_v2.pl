@@ -15,7 +15,9 @@ my @ordered = reverse sort { $map{$a} <=> $map{$b} } keys %map;
 
 my @codes = map { _parse($_); } map { chomp($_); $_ =~ s/\s//g; $_; } <DATA>;
 
-my $text = join "\n", map { $_ . ':' . shift @codes } @ordered;
+my %remap =  map { $_ => shift @codes } @ordered;
+
+my $text = join "\n", map { $_ . ':' . $remap{$_} } sort { $a cmp $b } keys %remap;
 
 print $text;
 
