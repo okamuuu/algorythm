@@ -25,6 +25,7 @@ if ( $typical eq decode($encoded2, \%codemap_v2) ) {
 }
 
 if ( $typical eq decode($encoded3, \%codemap_v3) ) {
+warn $encoded3;
     warn length $encoded3;
     print 'v3 is ok', "\n";
 }
