@@ -8,18 +8,25 @@ my $typical = slurp './data/typical.txt', {chomp => 1};
 
 my %codemap_v1 = map { split ':', $_ } split "\n", slurp './data/codemap_v1.txt';
 my %codemap_v2 = map { split ':', $_ } split "\n", slurp './data/codemap_v2.txt';
+my %codemap_v3 = map { split ':', $_ } split "\n", slurp './data/codemap_v3.txt';
 
 my $encoded1 = encode($typical, \%codemap_v1);
 my $encoded2 = encode($typical, \%codemap_v2);
+my $encoded3 = encode($typical, \%codemap_v3);
 
-if ( $typical eq decode($encoded1) ) {
+if ( $typical eq decode($encoded1, \%codemap_v1) ) {
     warn length $encoded1;
     print 'v1 is ok', "\n";
 }
 
-if ( $typical eq decode($encoded2) ) {
+if ( $typical eq decode($encoded2, \%codemap_v2) ) {
     warn length $encoded2;
     print 'v2 is ok', "\n";
+}
+
+if ( $typical eq decode($encoded3, \%codemap_v3) ) {
+    warn length $encoded3;
+    print 'v3 is ok', "\n";
 }
 
 sub encode {
@@ -40,7 +47,7 @@ sub decode {
     my ($encoded, $codemap) = @_;
 
     my @encoded = split '', $encoded; 
-    my %reversemap = map { $codemap_v1{$_} => $_ } keys %codemap_v1;
+    my %reversemap = map { $codemap->{$_} => $_ } keys %$codemap;
 
     my $code = '';
     my $decoded = '';
